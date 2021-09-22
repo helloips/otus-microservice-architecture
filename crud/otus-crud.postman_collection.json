@@ -26,13 +26,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://172.24.50.206/v1/student",
+					"raw": "http://arch.homework/v1/student",
 					"protocol": "http",
 					"host": [
-						"172",
-						"24",
-						"50",
-						"206"
+						"arch",
+						"homework"
 					],
 					"path": [
 						"v1",
@@ -54,12 +52,12 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8191/v1/student/1",
+					"raw": "http://arch.homework/v1/student/1",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"arch",
+						"homework"
 					],
-					"port": "8191",
 					"path": [
 						"v1",
 						"student",
@@ -84,12 +82,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8191/v1/student/1",
+					"raw": "http://arch.homework/v1/student/1",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"arch",
+						"homework"
 					],
-					"port": "8191",
 					"path": [
 						"v1",
 						"student",
