@@ -1,0 +1,37 @@
+config:
+  name: profiles-configmap
+  port: 8000
+  database: postgresql
+  ddl: create
+  driver: org.postgresql.Driver
+secret:
+    name: profiles-secret
+deployment:
+  app:
+    name: profiles-deployment
+    type: NodePort
+    image: helloips/profiles:1.0
+    port: 8000
+    sport: "8000"
+    replicas: 1
+    uri: "profiles-service"
+    jwtsecret: secret
+  db:
+    name: profilesql-deployment
+    type: NodePort
+    image: postgres:latest
+    port: 5432
+    replicas: 1
+service:
+  app:
+    name: profiles-service
+    type: NodePort
+    protocol: TCP
+    port: 8000
+  db:
+    name: profilesql-service
+    type: NodePort
+    dbname: db
+    host: "profilesql-service"
+    port: 5432
+    sport: "5432"

@@ -1,0 +1,37 @@
+config:
+  name: users-configmap
+  port: 8000
+  database: postgresql
+  ddl: create
+  driver: org.postgresql.Driver
+secret:
+    name: users-secret
+deployment:
+  app:
+    name: users-deployment
+    type: NodePort
+    image: helloips/users:1.0
+    port: 8000
+    sport: "8000"
+    replicas: 1
+    uri: "profiles-service"
+    jwtsecret: secret
+  db:
+    name: usersql-deployment
+    type: NodePort
+    image: postgres:latest
+    port: 5432
+    replicas: 1
+service:
+  app:
+    name: users-service
+    type: NodePort
+    protocol: TCP
+    port: 8000
+  db:
+    name: usersql-service
+    type: NodePort
+    dbname: db
+    host: "usersql-service"
+    port: 5432
+    sport: "5432"
