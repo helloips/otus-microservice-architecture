@@ -1,0 +1,150 @@
+https://sequencediagram.org/
+
+title HTTP
+
+actor Клиент
+participant "Order Service" as A
+participant "Billing Service" as B
+participant "Notification Service" as C
+
+group Создание клиентского счёта
+Клиент->B:POST /account
+B->Клиент:201 Created + id
+end
+
+group Пополнение/Снятие денежных средств
+Клиент->B:PATCH /account/{id}/money
+B->Клиент:200 OK
+end
+
+group Оформление заказа 
+Клиент->A:POST /account/{id}/order
+A->B:PATCH /account/{id}/money
+B->A:200 OK/400 Bad Request
+A->Клиент:201 Created + id/400 Bad Request
+A->C:POST /mail (async thread)
+C->A:200 OK
+end
+
+group Получение списка сообщений
+Клиент->C:GET /mail
+C->Клиент:200 OK + Список сообщений
+end
+
+title HTTP with broker
+
+actor Клиент
+participant "Order Service" as A
+participant "Billing Service" as B
+participantgroup #lightgreen **Notification Service**
+participant "API" as C
+participant "Broker" as D
+participant "Consumer" as E
+end
+group Создание клиентского счёта
+Клиент->B:POST /account
+B->Клиент:201 Created + id
+end
+
+group Пополнение/Снятие денежных средств
+Клиент->B:PATCH /account/{id}/money
+B->Клиент:200 OK
+end
+
+group Оформление заказа 
+Клиент->A:POST /account/{id}/order
+A->B:PATCH /account/{id}/money
+B->A:200 OK/400 Bad Request
+A->C:POST /mail
+C->D:Push event
+C->A:200 OK
+A->Клиент:201 Created + id/400 Bad Request
+E->D:Pull event
+end
+
+group Получение списка сообщений
+Клиент->C:GET /mail
+C->Клиент:200 OK + Список сообщений
+end
+
+title Event Collaboration
+
+actor Клиент
+participant "API" as A
+
+participantgroup #red **Consumers**
+participant "Billing Service" as B
+participant "Order Service" as C
+participant "Notification Service" as D
+end
+
+participantgroup #lightgreen **Broker**
+participant "Billing Topic" as E
+participant "Order Topic" as F
+participant "Notification Topic" as G
+end
+
+group Создание клиентского счёта
+Клиент->A:POST /account
+A->E:Публикация события на открытие нового счёта
+A->Клиент:201 Created + id
+B->E:Обработка события на открытие нового счёта
+end
+
+group Пополнение/Снятие денежных средств
+Клиент->A:PATCH /account/{id}/money
+A->E:Публикация события на пополнение/снятие денежных средств
+A->Клиент:200 OK
+B->E:Обработка события на пополнение/снятие денежных средств
+end
+
+group Оформление заказа 
+Клиент->A:POST /account/{id}/order
+A->F:Публикация события на оформление заказа
+A->Клиент:201 Created + id
+C->F:Обработка события на оформление заказа
+C->E:Публикация события на снятие денежных средств
+B->E:Обработка события на снятие денежных средств
+B->F:Публикация события выполнения списания
+C->F:Обработка события выполнения списания 
+C->G:Публикация события на отправку письма
+D->G:Обработка события на отправку письма
+end
+
+group Получение списка сообщений
+Клиент->A:GET /mail
+A->Клиент: Список сообщений
+end
+
+title BPM
+
+actor Клиент
+participant "Order Service" as A
+participant "Billing Service" as B
+participant "Notification Service" as C
+participant "Orchestrator" as D
+
+group Создание клиентского счёта
+Клиент->B:POST /account
+B->Клиент:201 Created + id
+end
+
+group Пополнение/Снятие денежных средств
+Клиент->B:PATCH /account/{id}/money
+B->Клиент:200 OK
+end
+
+group Оформление заказа 
+Клиент->A:POST /account/{id}/order
+A->D:POST /order/new
+D->A:200 OK/400 Bad Request
+A->Клиент:201 Created + id/400 Bad Request
+B->D: External task: Снятие денежных средств
+A->D: External task: Оформление заказа
+C->D: External task: Отправка сообщения
+end
+
+group Получение списка сообщений
+Клиент->C:GET /mail
+C->Клиент:200 OK + Список сообщений
+end

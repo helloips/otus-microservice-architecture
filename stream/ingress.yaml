@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /account/(.*)/money
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: 8000
+          - path: /account/(.*)/order
+            pathType: Prefix
+            backend:
+              service:
+                name: orders-service
+                port:
+                  number: 8000
+          - path: /account/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: 8000
+          - path: /account
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: 8000
+          - path: /mail
+            pathType: Prefix
+            backend:
+              service:
+                name: notification-service
+                port:
+                  number: 8000

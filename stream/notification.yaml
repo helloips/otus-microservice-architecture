@@ -1,0 +1,172 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+spec:
+  type: NodePort
+  selector:
+    app: notification-deployment
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-db-service
+spec:
+  type: NodePort
+  selector:
+    app: notification-db-deployment
+  ports:
+    - port: 5432
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-deployment
+  template:
+    metadata:
+      labels:
+        app: notification-deployment
+    spec:
+      containers:
+        - name: notification
+          image: helloips/notification:1.0
+          ports:
+            - name: web
+              containerPort: 8000
+          env:
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-configmap
+                  key: SERVER_PORT
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-configmap
+                  key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-configmap
+                  key: SPRING_JPA_HIBERNATE_DDL_AUTO
+            - name: SPRING_JPA_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-configmap
+                  key: SPRING_JPA_DATABASE
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secret
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: CAMUNDA_REST_API_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-configmap
+                  key: CAMUNDA_REST_API_URI
+            - name: CAMUNDA_CLIENT_LOCK_DURATION
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-configmap
+                  key: CAMUNDA_CLIENT_LOCK_DURATION
+            - name: CAMUNDA_CLIENT_LOGGING_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-configmap
+                  key: CAMUNDA_CLIENT_LOGGING_LEVEL
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: notification-db-deployment
+spec:
+  serviceName: "postgres"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-db-deployment
+  template:
+    metadata:
+      labels:
+        app: notification-db-deployment
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: postgredb
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secret
+                  key: DATABASE_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          volumeMounts:
+            - name: postgredb
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: postgredb
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: notification-secret
+type: Opaque
+data:
+  DATABASE_USERNAME: YWRtaW4=
+  DATABASE_PASSWORD: cGFzc3dvcmQ=
+  DATABASE_NAME: ZGI=
+  SPRING_DATASOURCE_URL: "amRiYzpwb3N0Z3Jlc3FsOi8vbm90aWZpY2F0aW9uLWRiLXNlcnZpY2U6NTQzMi9kYg=="
+  SPRING_DATASOURCE_USERNAME: YWRtaW4=
+  SPRING_DATASOURCE_PASSWORD: cGFzc3dvcmQ=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notification-configmap
+data:
+  SERVER_PORT: "8000"
+  SPRING_JPA_DATABASE: "postgresql"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "create"
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.postgresql.Driver"
+  CAMUNDA_REST_API_URI: "http://orchestrator-service:8000/rest"
+  CAMUNDA_CLIENT_LOCK_DURATION: "1000"
+  CAMUNDA_CLIENT_LOGGING_LEVEL: "DEBUG"

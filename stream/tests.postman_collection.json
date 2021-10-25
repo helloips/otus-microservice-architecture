@@ -1,0 +1,453 @@
+{
+	"info": {
+		"_postman_id": "e1f8132a-02ba-4315-83d5-310dafe0a257",
+		"name": "tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var accountId;\r",
+							"pm.test(\"Create account\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    accountId = pm.response.headers.get(\"X-Account-Id\");\r",
+							"});\r",
+							"postman.setEnvironmentVariable(\"accountId\", accountId);\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + accountId);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"fullName\", pm.variables.replaceIn('{{$randomFirstName}}'))\r",
+							"pm.collectionVariables.set(\"money\", pm.variables.replaceIn('100'))\r",
+							"pm.collectionVariables.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}'))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"{{fullName}}\",\r\n    \"money\": \"{{money}}\",\r\n    \"email\": \"{{email}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/account",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Top up an account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Top up an account\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"console.log(\"request:\");\r",
+							"console.log(\"response:\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/account/{{accountId}}/money?coins=100",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"account",
+						"{{accountId}}",
+						"money"
+					],
+					"query": [
+						{
+							"key": "coins",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create order #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create order #1\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    orderId = pm.response.headers.get(\"X-Order-Id\");\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + orderId);\r",
+							"console.log(\"Delay for async...\");\r",
+							"setTimeout(() => {}, 60000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"TV\",\r\n    \"price\": 199,\r\n    \"description\": \"Акция 1+1=3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/account/{{accountId}}/order",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"account",
+						"{{accountId}}",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check money #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check money #1\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.money).to.eql(1);\r",
+							"});\r",
+							"console.log(\"request:\");\r",
+							"console.log(\"response:\" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token1}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/account/{{accountId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"account",
+						"{{accountId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check mail #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check mail #1\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData[0].text).to.eql(\"Success\");\r",
+							"});\r",
+							"console.log(\"request:\");\r",
+							"console.log(\"response:\" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token1}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/mail?accountId={{accountId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"mail"
+					],
+					"query": [
+						{
+							"key": "accountId",
+							"value": "{{accountId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create order #2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create order #2\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    orderId = pm.response.headers.get(\"X-Order-Id\");\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + orderId);\r",
+							"console.log(\"Delay for async...\");\r",
+							"setTimeout(() => {}, 60000); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"TV\",\r\n    \"price\": 200,\r\n    \"description\": \"Акция 1+1=100\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/account/{{accountId}}/order",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"account",
+						"{{accountId}}",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check money #2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check money #2\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.money).to.eql(1);\r",
+							"});\r",
+							"console.log(\"request:\");\r",
+							"console.log(\"response:\" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/account/{{accountId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"account",
+						"{{accountId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check mail #2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check mail #2\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData[1].text).to.eql(\"Not enough money\");\r",
+							"});\r",
+							"console.log(\"request:\");\r",
+							"console.log(\"response:\" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{token2}}",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/mail?accountId={{accountId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"mail"
+					],
+					"query": [
+						{
+							"key": "accountId",
+							"value": "{{accountId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "arch.homework"
+		}
+	]
+}
