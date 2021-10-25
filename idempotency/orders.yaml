@@ -1,0 +1,171 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /order
+            pathType: Prefix
+            backend:
+              service:
+                name: orders-service
+                port:
+                  number: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-service
+spec:
+  type: NodePort
+  selector:
+    app: orders-deployment
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-db-service
+spec:
+  type: NodePort
+  selector:
+    app: orders-db-deployment
+  ports:
+    - port: 5432
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-deployment
+  template:
+    metadata:
+      labels:
+        app: orders-deployment
+    spec:
+      containers:
+        - name: orders
+          image: helloips/orders:2.0
+          ports:
+            - name: web
+              containerPort: 8000
+          env:
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: orders-configmap
+                  key: SERVER_PORT
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: orders-configmap
+                  key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: orders-configmap
+                  key: SPRING_JPA_HIBERNATE_DDL_AUTO
+            - name: SPRING_JPA_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: orders-configmap
+                  key: SPRING_JPA_DATABASE
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: orders-secret
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: orders-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: orders-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: orders-db-deployment
+spec:
+  serviceName: "postgres"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-db-deployment
+  template:
+    metadata:
+      labels:
+        app: orders-db-deployment
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: postgredb
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: orders-secret
+                  key: DATABASE_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: orders-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: orders-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          volumeMounts:
+            - name: postgredb
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: postgredb
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: orders-secret
+type: Opaque
+data:
+  DATABASE_USERNAME: YWRtaW4=
+  DATABASE_PASSWORD: cGFzc3dvcmQ=
+  DATABASE_NAME: ZGI=
+  SPRING_DATASOURCE_URL: "amRiYzpwb3N0Z3Jlc3FsOi8vb3JkZXJzLWRiLXNlcnZpY2U6NTQzMi9kYg=="
+  SPRING_DATASOURCE_USERNAME: YWRtaW4=
+  SPRING_DATASOURCE_PASSWORD: cGFzc3dvcmQ=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-configmap
+data:
+  SERVER_PORT: "8000"
+  SPRING_JPA_DATABASE: "postgresql"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "create"
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.postgresql.Driver"
