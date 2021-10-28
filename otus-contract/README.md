@@ -35,3 +35,4 @@
 ![crm](https://user-images.githubusercontent.com/87579523/139313576-5d1006fc-761e-4ddb-a482-de3474edc12a.png)
 
 ## Основной сценарий заключения договора:
+![diagram](https://user-images.githubusercontent.com/87579523/139316107-a734eb3e-e188-4ffe-80d2-067281d81935.png)
