@@ -1,36 +1,36 @@
-Выпускной проект: OTUS Договор.
+# Выпускной проект: OTUS Договор.
 Назначение: Система дистанционного заключения договора с потенциальными студентами online-школы OTUS.
 
-Сервисы и их назначения:
+## Сервисы и их назначения:
 
-Contract Service.
+### Contract Service.
 1) Cбор и хранение клиентских данных;
 2) Генерация документов;
 
-Notification Service.
+### Notification Service.
 1) Отправка email уведомлений участникам процесса;
 2) Отправка webhooks;
 
-Promo Service.
+### Promo Service.
 1) Хранение информации о промо-активностях;
 2) Валидация промокодов;
 
-Mentor Service.
+### Mentor Service.
 1) Учёт менторов online-школы;
 2) Бронирование времени ментора;
 
-Billing Service.
+### Billing Service.
 1) Формирование счетов на оплату услуг;
 2) Корректировка платежей с учётом скидок;
 3) Учёт погашения счетов;
 
 Оркестрация выше описанных сервисов выполняется средствами CamundaBPM.
 
-Сценарии:
+## Сценарии:
 
-Администратор.
+### Администратор.
 ![admin](https://user-images.githubusercontent.com/87579523/139313533-f9ee91bf-a9fb-46de-acc8-7b1614843fdf.png)
 
-CRM/otus.ru
+### CRM/otus.ru
 ![crm](https://user-images.githubusercontent.com/87579523/139313576-5d1006fc-761e-4ddb-a482-de3474edc12a.png)
 
