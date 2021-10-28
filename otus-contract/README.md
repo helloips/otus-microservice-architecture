@@ -26,7 +26,7 @@
 
 Оркестрация выше описанных сервисов выполняется средствами CamundaBPM.
 
-## Сценарии:
+## Сценарии взаимодействия с API:
 
 ### Администратор.
 ![admin](https://user-images.githubusercontent.com/87579523/139313533-f9ee91bf-a9fb-46de-acc8-7b1614843fdf.png)
@@ -34,3 +34,4 @@
 ### CRM/otus.ru
 ![crm](https://user-images.githubusercontent.com/87579523/139313576-5d1006fc-761e-4ddb-a482-de3474edc12a.png)
 
+## Основной сценарий заключения договора:
