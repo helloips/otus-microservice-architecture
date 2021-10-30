@@ -30,8 +30,8 @@
 2) Ментор;
 ![admin](https://user-images.githubusercontent.com/87579523/139543024-e30be218-376e-4ded-a2f6-ffc8a2ac0725.png)
 
-### CRM/otus.ru
-![crm](https://user-images.githubusercontent.com/87579523/139313576-5d1006fc-761e-4ddb-a482-de3474edc12a.png)
+### CRM.
+![crm](https://user-images.githubusercontent.com/87579523/139543255-56b02eba-37b6-4476-9531-b3a2cac733b1.png)
 
 ## Основной сценарий заключения договора:
 ![diagram](https://user-images.githubusercontent.com/87579523/139316107-a734eb3e-e188-4ffe-80d2-067281d81935.png)
