@@ -28,7 +28,7 @@
 Ответственный сотрудник online-школы, должен иметь возможность создавать/редактировать/удалять следующие сущности:
 1) Акция или промокод;
 2) Ментор;
-![admin](https://user-images.githubusercontent.com/87579523/139313533-f9ee91bf-a9fb-46de-acc8-7b1614843fdf.png)
+![admin](https://user-images.githubusercontent.com/87579523/139542932-8588784b-3bfc-4c2a-8960-bdd27b90a76c.png)
 
 ### CRM/otus.ru
 ![crm](https://user-images.githubusercontent.com/87579523/139313576-5d1006fc-761e-4ddb-a482-de3474edc12a.png)
