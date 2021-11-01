@@ -36,8 +36,8 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 
 ### Администратор.
 Ответственный сотрудник online-школы, должен иметь возможность создавать/редактировать/удалять следующие сущности:
-1) Акция или промокод;
-2) Ментор;
+1) Акции;
+2) Курсы;
 ![admin](https://user-images.githubusercontent.com/87579523/139543024-e30be218-376e-4ded-a2f6-ffc8a2ac0725.png)
 
 ### CRM.
