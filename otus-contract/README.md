@@ -38,6 +38,7 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 Ответственный сотрудник online-школы, должен иметь возможность создавать/просматривать/обновлять/удалять следующие сущности:
 1) Акции;
 2) Курсы;
+
 А также получать данные в соответствии с заданными критериями по следующим сущностям:
 1) Уведомления;
 ![admin](https://user-images.githubusercontent.com/87579523/139543024-e30be218-376e-4ded-a2f6-ffc8a2ac0725.png)
