@@ -44,11 +44,11 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 ![admin](https://user-images.githubusercontent.com/87579523/139543024-e30be218-376e-4ded-a2f6-ffc8a2ac0725.png)
 
 ### CRM
-Целевая система-источник должна иметь возможность создавать/просматривать/обновлять/удалять следующие сущности:
+Целевая система-источник должна иметь возможность создавать/удалять следующие сущности:
 1) Договор;
 
 А также иметь возможность получать уведомления о результате работы системы;
-![crm](https://user-images.githubusercontent.com/87579523/139543255-56b02eba-37b6-4476-9531-b3a2cac733b1.png)
+![crm](https://user-images.githubusercontent.com/87579523/139647871-60a877d7-d3bd-4107-a3bf-e6b711244b87.png)
 
 ## Основной сценарий заключения договора
 ![diagram](https://user-images.githubusercontent.com/87579523/139316107-a734eb3e-e188-4ffe-80d2-067281d81935.png)
