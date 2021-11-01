@@ -33,6 +33,8 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 2) Отправка webhooks
 
 ## Сценарии взаимодействий
+#### OpenApi тут
+[GitHub](http://github.com)
 
 ### Администратор
 Ответственный сотрудник online-школы, должен иметь возможность создавать/просматривать/обновлять/удалять следующие сущности:
