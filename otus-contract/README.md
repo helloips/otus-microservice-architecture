@@ -61,7 +61,6 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 ![diagram](https://user-images.githubusercontent.com/87579523/139316107-a734eb3e-e188-4ffe-80d2-067281d81935.png)
 
 ## Чего явно не хватает?
-### Подпись...
 Для скрепления договора используем "Госключ". Принимаем его за MOCK.
 
 Добавить X-Request-Id для поддержки идемпотентности.
