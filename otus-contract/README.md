@@ -34,7 +34,7 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 
 ## Сценарии взаимодействий
 #### OpenApi тут
-[GitHub](http://github.com)
+[GitHub](https://github.com/helloips/otus-microservice-architecture/blob/master/otus-contract/swagger.yaml)
 
 ### Администратор
 Ответственный сотрудник online-школы, должен иметь возможность создавать/просматривать/обновлять/удалять следующие сущности:
