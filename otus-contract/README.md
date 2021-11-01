@@ -1,5 +1,6 @@
 # Выпускной проект: OTUS Договор.
 Цель: 
+
 Технологический стэк: Kubernetes, NGINX, Java, Spring Framework, Camunda, PostgreSQL, MongoDB.
 
 Назначение: Система дистанционного заключения договора с потенциальными студентами online-школы OTUS.
