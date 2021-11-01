@@ -64,4 +64,4 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 ### Подпись...
 Для скрепления договора используем "Госключ". Принимаем его за MOCK.
 
-Добавить X-Request-Id для потдержки идемпотентности.
+Добавить X-Request-Id для поддержки идемпотентности.
