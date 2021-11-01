@@ -1,0 +1,643 @@
+swagger: "2.0"
+info:
+  description: "Система дистанционного заключения договора с потенциальными 
+  студентами online-школы OTUS"
+  version: "1.0"
+  title: "OTUS Договор"
+  termsOfService: ""
+  contact:
+    email: "helloips@yandex.ru"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "otus.ru"
+basePath: "/digital/v1"
+tags:
+- name: "User Service"
+  description: "Пользователи системы"
+- name: "Contract Service"
+  description: "Договоры с клиентами"
+- name: "Course Service"
+  description: "Доступные курсы"
+- name: "Promo Service"
+  description: "Акции"
+- name: "Notification Service"
+  description: "Уведомления и webhooks"
+schemes:
+- "https"
+- "http"
+paths:
+  /user/login:
+    post:
+      tags:
+      - "User Service"
+      summary: "Получить токен доступа"
+      operationId: "login"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "user"
+        in: "body"
+        description: "Учётные данные"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "Токен успешно выдан"
+          schema:
+            $ref: "#/definitions/Token"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "403":
+          description: "Неверные учетные данные"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+  /contract:
+    post:
+      tags:
+      - "Contract Service"
+      summary: "Создать договор"
+      operationId: "createContract"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contract"
+        in: "body"
+        description: "Данные о договоре"
+        required: true
+        schema:
+          $ref: "#/definitions/Contract"
+      - name: "X-Request-Id"
+        in: "header"
+        description: "Запрос id"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Договор успешно создана"
+          schema:
+            $ref: "#/definitions/Id"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+  /contract/data:
+    post:
+      tags:
+      - "Contract Service"
+      summary: "Принять клиентские данные"
+      operationId: "acceptData"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "data"
+        in: "body"
+        description: "Клиентские данные"
+        required: true
+        schema:
+          $ref: "#/definitions/Data"
+      responses:
+        "204":
+          description: "Клиентские данные успешно приняты"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+  /contract/{contractId}:
+    get:
+      tags:
+      - "Contract Service"
+      summary: "Просмотреть договор"
+      operationId: "readContract"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contractId"
+        in: "path"
+        description: "Договор id"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Договор"
+          schema:
+            $ref: "#/definitions/Contract"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+      - "Contract Service"
+      summary: "Обновить договор"
+      operationId: "updateContract"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contractId"
+        in: "path"
+        description: "Договор id"
+        required: true
+        type: "string"
+      - name: "contract"
+        in: "body"
+        description: "Данные о договоре"
+        required: true
+        schema:
+          $ref: "#/definitions/Contract"
+      responses:
+        "204":
+          description: "Договор успешно обновлён"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - "Contract Service"
+      summary: "Удалить договор"
+      operationId: "deleteContract"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contractId"
+        in: "path"
+        description: "Договор id"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "Договор успешно удален"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+  /course:
+    post:
+      tags:
+      - "Course Service"
+      summary: "Создать курс"
+      operationId: "createCourse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "course"
+        in: "body"
+        description: "Данные о курсе"
+        required: true
+        schema:
+          $ref: "#/definitions/Course"
+      - name: "X-Request-Id"
+        in: "header"
+        description: "Запрос id"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Курс успешно создан"
+          schema:
+            $ref: "#/definitions/Id"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+  /course/{courseId}:
+    get:
+      tags:
+      - "Course Service"
+      summary: "Просмотреть курс"
+      operationId: "readCourse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "Курс id"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Курс"
+          schema:
+            $ref: "#/definitions/Course"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+      - "Course Service"
+      summary: "Обновить курс"
+      operationId: "updateCourse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "Курс id"
+        required: true
+        type: "string"
+      - name: "course"
+        in: "body"
+        description: "Данные о курсе"
+        required: true
+        schema:
+          $ref: "#/definitions/Course"
+      responses:
+        "204":
+          description: "Курс успешно обновлён"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - "Course Service"
+      summary: "Удалить курс"
+      operationId: "deleteCourse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "Курс id"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "Курс успешно удален"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+  /promo:
+    post:
+      tags:
+      - "Promo Service"
+      summary: "Создать акцию"
+      operationId: "createPromo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "promo"
+        in: "body"
+        description: "Характеристики промокода"
+        required: true
+        schema:
+          $ref: "#/definitions/Promo"
+      - name: "X-Request-Id"
+        in: "header"
+        description: "Запрос id"
+        required: true
+        type: "string"
+      responses:
+        "201":
+          description: "Промокод успешно создан"
+          schema:
+            $ref: "#/definitions/Id"
+  /promo/check:
+    post:
+      tags:
+      - "Promo Service"
+      summary: "Проверить промокод"
+      operationId: "checkCode"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "data"
+        in: "body"
+        description: "Промокод"
+        required: true
+        schema:
+          $ref: "#/definitions/Data"
+      responses:
+        "201":
+          description: "Промокод проверен"
+          schema:
+            $ref: "#/definitions/Id"
+  /promo/{promoId}:
+    get:
+      tags:
+      - "Promo Service"
+      summary: "Просмотреть акцию"
+      operationId: "readPromo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "promoId"
+        in: "path"
+        description: "Акция id"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Акция"
+          schema:
+            $ref: "#/definitions/Promo"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+      - "Promo Service"
+      summary: "Обновить акцию"
+      operationId: "updatePromo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "promoId"
+        in: "path"
+        description: "Акция id"
+        required: true
+        type: "string"
+      - name: "promo"
+        in: "body"
+        description: "Данные об акции"
+        required: true
+        schema:
+          $ref: "#/definitions/Promo"
+      responses:
+        "204":
+          description: "Акция успешно обновлён"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - "Promo Service"
+      summary: "Удалить акцию"
+      operationId: "deletePromo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "promoId"
+        in: "path"
+        description: "Акция id"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "Акция успешно удалена"
+  /notification/search:
+    get:
+      tags:
+      - "Notification Service"
+      summary: "Поиск уведомлений"
+      operationId: "searchNotification"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "type"
+        in: "query"
+        description: "Тип уведомления"
+        required: true
+        type: "string"
+      - name: "destination"
+        in: "query"
+        description: "Получатель"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Акция"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Notification'
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+  Contract:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      template:
+        type: "string"
+      cost:
+        type: "number"
+      limit:
+        type: "number"
+      from:
+        type: "string"
+        format: "date"
+      to:
+        type: "string"
+        format: "date"
+  Data:
+    type: "object"
+    properties:
+      state:
+        type: "string"
+      secret:
+        type: "string"
+      code:
+        type: "string"
+  Course:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      template:
+        type: "string"
+      cost:
+        type: "number"
+      limit:
+        type: "number"
+      from:
+        type: "string"
+        format: "date"
+      to:
+        type: "string"
+        format: "date"
+  Promo:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      code:
+        type: "string"
+      personal:
+        type: "boolean"
+      from:
+        type: "string"
+        format: "date-time"
+      to:
+        type: "string"
+        format: "date-time"
+  Token:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+  Id:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+  Notification:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      destination:
+        type: "string"
+      status:
+        type: "string"
+      time:
+        type: "string"
+        format: "date-time"
+  Error:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
