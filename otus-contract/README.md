@@ -33,7 +33,7 @@ Kubernetes, NGINX, Prometheus, Grafana, Java, Spring Framework, Camunda, Postgre
 2) Отправка webhooks
 
 ## Сценарии взаимодействий
-[OpenApi тут](https://github.com/helloips/otus-microservice-architecture/blob/master/otus-contract/swagger.yaml)
+[OpenApi тут...](https://github.com/helloips/otus-microservice-architecture/blob/master/otus-contract/swagger.yaml)
 
 ### Администратор
 Ответственный сотрудник online-школы, должен иметь возможность создавать/просматривать/обновлять/удалять следующие сущности:
