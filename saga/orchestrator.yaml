@@ -1,0 +1,172 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestrator-service
+spec:
+  type: NodePort
+  selector:
+    app: orchestrator-deployment
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestrator-db-service
+spec:
+  type: NodePort
+  selector:
+    app: orchestrator-db-deployment
+  ports:
+    - port: 5432
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestrator-deployment
+  template:
+    metadata:
+      labels:
+        app: orchestrator-deployment
+    spec:
+      containers:
+        - name: orchestrator
+          image: helloips/orchestrator:2.0
+          ports:
+            - name: web
+              containerPort: 8000
+          env:
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: orchestrator-configmap
+                  key: SERVER_PORT
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: orchestrator-configmap
+                  key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: orchestrator-configmap
+                  key: SPRING_JPA_HIBERNATE_DDL_AUTO
+            - name: SPRING_JPA_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: orchestrator-configmap
+                  key: SPRING_JPA_DATABASE
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: CAMUNDA_ADMIN_ID
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: CAMUNDA_ADMIN_ID
+            - name: CAMUNDA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: CAMUNDA_ADMIN_PASSWORD
+            - name: CAMUNDA_ADMIN_FIRST_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: orchestrator-configmap
+                  key: CAMUNDA_ADMIN_FIRST_NAME
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: orchestrator-db-deployment
+spec:
+  serviceName: "postgres"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestrator-db-deployment
+  template:
+    metadata:
+      labels:
+        app: orchestrator-db-deployment
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: postgredb
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: DATABASE_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: orchestrator-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          volumeMounts:
+            - name: postgredb
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: postgredb
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: orchestrator-secret
+type: Opaque
+data:
+  DATABASE_USERNAME: YWRtaW4=
+  DATABASE_PASSWORD: cGFzc3dvcmQ=
+  DATABASE_NAME: ZGI=
+  SPRING_DATASOURCE_URL: "amRiYzpwb3N0Z3Jlc3FsOi8vb3JjaGVzdHJhdG9yLWRiLXNlcnZpY2U6NTQzMi9kYg=="
+  SPRING_DATASOURCE_USERNAME: YWRtaW4=
+  SPRING_DATASOURCE_PASSWORD: cGFzc3dvcmQ=
+  CAMUNDA_ADMIN_ID: YWRtaW4=
+  CAMUNDA_ADMIN_PASSWORD: YWRtaW4=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orchestrator-configmap
+data:
+  SERVER_PORT: "8000"
+  SPRING_JPA_DATABASE: "postgresql"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "create"
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.postgresql.Driver"
+  CAMUNDA_ADMIN_FIRST_NAME: "Admin"

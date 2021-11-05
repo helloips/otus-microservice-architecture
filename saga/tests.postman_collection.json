@@ -1,0 +1,677 @@
+{
+	"info": {
+		"_postman_id": "e1f8132a-02ba-4315-83d5-310dafe0a257",
+		"name": "tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create course #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var courseId;\r",
+							"pm.test(\"Create course #1\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    var jsonData = JSON.parse(responseBody)\r",
+							"    courseId = jsonData.id;\r",
+							"});\r",
+							"postman.setEnvironmentVariable(\"courseId1\", courseId);\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					},
+					{
+						"key": "X-Request-Id",
+						"type": "text",
+						"value": "{{requestId}}",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Java Basic\",\r\n    \"cost\": 50000,\r\n    \"limit\": 30,\r\n    \"from\": \"2021-12-04\",\r\n    \"to\": \"2022-03-04\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/course",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"course"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create promo #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var promoId;\r",
+							"pm.test(\"Create promo #1\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    var jsonData = JSON.parse(responseBody)\r",
+							"    promoId = jsonData.id;\r",
+							"});\r",
+							"postman.setEnvironmentVariable(\"promoId1\", promoId);\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					},
+					{
+						"key": "X-Request-Id",
+						"type": "text",
+						"value": "{{requestId}}",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"1+1=3\",\r\n    \"code\": \"1234\",\r\n    \"active\": true,\r\n    \"discount\": 30,\r\n    \"from\": \"2021-11-04\",\r\n    \"to\": \"2022-11-04\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/promo",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"promo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create contract #1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var contractId;\r",
+							"pm.test(\"Create contract #1\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    var jsonData = JSON.parse(responseBody)\r",
+							"    contractId = jsonData.id;\r",
+							"});\r",
+							"postman.setEnvironmentVariable(\"contractId1\", contractId);\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);\r",
+							"console.log(\"Delay for async...\");\r",
+							"setTimeout(() => {}, 120000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					},
+					{
+						"key": "X-Request-Id",
+						"type": "text",
+						"value": "{{requestId}}",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"courseId\": \"{{courseId1}}\",\r\n    \"promoId\": \"{{promoId1}}\",\r\n    \"template\": \"123\",\r\n    \"status\": \"CREATED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/contract",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"contract"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read course #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Read course #1 and limit equals\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"\tpm.expect(jsonData.limit).to.eql(29);\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/course/{{courseId1}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"course",
+						"{{courseId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read promo #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Read promo #1 and active is false\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"\tpm.expect(jsonData.active).to.eql(false);\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/promo/{{promoId1}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"promo",
+						"{{promoId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read contract #1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Read contract #1 and status is SUCCESS\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"\tpm.expect(jsonData.status).to.eql(\"SUCCESS\");\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/contract/{{contractId1}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"contract",
+						"{{contractId1}}"
+					],
+					"query": [
+						{
+							"key": "Host",
+							"value": "{{baseUrl}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create course #2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var courseId;\r",
+							"pm.test(\"Create course #2\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    var jsonData = JSON.parse(responseBody)\r",
+							"    courseId = jsonData.id;\r",
+							"});\r",
+							"postman.setEnvironmentVariable(\"courseId2\", courseId);\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					},
+					{
+						"key": "X-Request-Id",
+						"type": "text",
+						"value": "{{requestId}}",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Java Basic\",\r\n    \"cost\": 50000,\r\n    \"limit\": 30,\r\n    \"from\": \"2021-12-04\",\r\n    \"to\": \"2022-03-04\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/course",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"course"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create promo #2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var promoId;\r",
+							"pm.test(\"Create promo #2\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    var jsonData = JSON.parse(responseBody)\r",
+							"    promoId = jsonData.id;\r",
+							"});\r",
+							"postman.setEnvironmentVariable(\"promoId2\", promoId);\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"type": "text",
+						"value": "{{baseUrl}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"1+1=3\",\r\n    \"code\": \"1234\",\r\n    \"active\": true,\r\n    \"discount\": 30,\r\n    \"from\": \"2021-11-04\",\r\n    \"to\": \"2022-11-04\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/promo",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"promo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create contract #2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var contractId;\r",
+							"pm.test(\"Create contract #2\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    var jsonData = JSON.parse(responseBody)\r",
+							"    contractId = jsonData.id;\r",
+							"});\r",
+							"postman.setEnvironmentVariable(\"contractId2\", contractId);\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);\r",
+							"console.log(\"Delay for async...\");\r",
+							"setTimeout(() => {}, 120000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Request-Id",
+						"value": "{{requestIdl}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"courseId\": \"{{courseId2}}\",\r\n    \"promoId\": \"{{promoId2}}\",\r\n    \"template\": \"\",\r\n    \"status\": \"CREATED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/contract",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"contract"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read course #2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Read course #2 and limit equals\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"\tpm.expect(jsonData.limit).to.eql(30);\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/course/{{courseId2}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"course",
+						"{{courseId2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read promo #2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Read promo #2 and active is true\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"\tpm.expect(jsonData.active).to.eql(true);\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/promo/{{promoId2}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"promo",
+						"{{promoId2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read contract #2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Read contract #2 and status is ERROR\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"\tpm.expect(jsonData.status).to.eql(\"ERROR\");\r",
+							"});\r",
+							"console.log(\"request: \" + request.data);\r",
+							"console.log(\"response: \" + responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "{{baseUrl}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/digital/v1/contract/{{contractId2}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"digital",
+						"v1",
+						"contract",
+						"{{contractId2}}"
+					],
+					"query": [
+						{
+							"key": "Host",
+							"value": "{{baseUrl}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "arch.homework"
+		}
+	]
+}
