@@ -84,10 +84,10 @@ paths:
         required: true
         type: "string"
       responses:
-        "200":
+        "201":
           description: "Договор успешно создана"
           schema:
-            $ref: "#/definitions/Id"
+            $ref: "#/definitions/Contract"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -187,8 +187,10 @@ paths:
         schema:
           $ref: "#/definitions/Contract"
       responses:
-        "204":
+        "200":
           description: "Договор успешно обновлён"
+          schema:
+            $ref: "#/definitions/Contract"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -217,8 +219,10 @@ paths:
         required: true
         type: "string"
       responses:
-        "204":
+        "200":
           description: "Договор успешно удален"
+          schema:
+            $ref: "#/definitions/Contract"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -254,10 +258,10 @@ paths:
         required: true
         type: "string"
       responses:
-        "200":
+        "201":
           description: "Курс успешно создан"
           schema:
-            $ref: "#/definitions/Id"
+            $ref: "#/definitions/Course"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -325,8 +329,10 @@ paths:
         schema:
           $ref: "#/definitions/Course"
       responses:
-        "204":
+        "200":
           description: "Курс успешно обновлён"
+          schema:
+            $ref: "#/definitions/Course"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -355,8 +361,10 @@ paths:
         required: true
         type: "string"
       responses:
-        "204":
+        "200":
           description: "Курс успешно удален"
+          schema:
+            $ref: "#/definitions/Course"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -395,7 +403,7 @@ paths:
         "201":
           description: "Промокод успешно создан"
           schema:
-            $ref: "#/definitions/Id"
+            $ref: "#/definitions/Promo"
   /promo/check:
     post:
       tags:
@@ -414,10 +422,8 @@ paths:
         schema:
           $ref: "#/definitions/Data"
       responses:
-        "201":
+        "200":
           description: "Промокод проверен"
-          schema:
-            $ref: "#/definitions/Id"
   /promo/{promoId}:
     get:
       tags:
@@ -473,8 +479,10 @@ paths:
         schema:
           $ref: "#/definitions/Promo"
       responses:
-        "204":
+        "200":
           description: "Акция успешно обновлён"
+          schema:
+            $ref: "#/definitions/Promo"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -503,8 +511,22 @@ paths:
         required: true
         type: "string"
       responses:
-        "204":
+        "200":
           description: "Акция успешно удалена"
+          schema:
+            $ref: "#/definitions/Promo"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
   /notification/search:
     get:
       tags:
@@ -556,20 +578,16 @@ definitions:
   Contract:
     type: "object"
     properties:
-      name:
+      id:
+        type: "string"    
+      courseId:
+        type: "string"
+      promoId:
         type: "string"
       template:
         type: "string"
-      cost:
-        type: "number"
-      limit:
-        type: "number"
-      from:
+      status:
         type: "string"
-        format: "date"
-      to:
-        type: "string"
-        format: "date"
   Data:
     type: "object"
     properties:
@@ -582,9 +600,9 @@ definitions:
   Course:
     type: "object"
     properties:
+      id:
+        type: "string"  
       name:
-        type: "string"
-      template:
         type: "string"
       cost:
         type: "number"
@@ -599,27 +617,26 @@ definitions:
   Promo:
     type: "object"
     properties:
+      id:
+        type: "string"  
       name:
         type: "string"
       code:
         type: "string"
-      personal:
+      active:
         type: "boolean"
+      discount:
+        type: "number"
       from:
         type: "string"
-        format: "date-time"
+        format: "date"
       to:
         type: "string"
-        format: "date-time"
+        format: "date"
   Token:
     type: "object"
     properties:
       token:
-        type: "string"
-  Id:
-    type: "object"
-    properties:
-      id:
         type: "string"
   Notification:
     type: "object"
