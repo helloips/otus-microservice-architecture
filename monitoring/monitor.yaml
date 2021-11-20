@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: metrics-monitor
+  labels:
+    app: metrics-monitor
+spec:
+  jobLabel: metrics-monitor
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metrics
+      app.kubernetes.io/instance: RELEASE-NAME
+  endpoints:
+  - interval: 15s
+    port: web
+    path: /actuator/prometheus
