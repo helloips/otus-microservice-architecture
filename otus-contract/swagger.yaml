@@ -83,11 +83,16 @@ paths:
         description: "Запрос id"
         required: true
         type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "200":
+        "201":
           description: "Договор успешно создана"
           schema:
-            $ref: "#/definitions/Id"
+            $ref: "#/definitions/Contract"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -117,6 +122,11 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/Data"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
         "204":
           description: "Клиентские данные успешно приняты"
@@ -146,6 +156,11 @@ paths:
       - name: "contractId"
         in: "path"
         description: "Договор id"
+        required: true
+        type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
         required: true
         type: "string"
       responses:
@@ -186,9 +201,16 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/Contract"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "204":
+        "200":
           description: "Договор успешно обновлён"
+          schema:
+            $ref: "#/definitions/Contract"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -216,9 +238,16 @@ paths:
         description: "Договор id"
         required: true
         type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "204":
+        "200":
           description: "Договор успешно удален"
+          schema:
+            $ref: "#/definitions/Contract"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -253,11 +282,16 @@ paths:
         description: "Запрос id"
         required: true
         type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "200":
+        "201":
           description: "Курс успешно создан"
           schema:
-            $ref: "#/definitions/Id"
+            $ref: "#/definitions/Course"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -284,6 +318,11 @@ paths:
       - name: "courseId"
         in: "path"
         description: "Курс id"
+        required: true
+        type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
         required: true
         type: "string"
       responses:
@@ -324,9 +363,16 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/Course"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "204":
+        "200":
           description: "Курс успешно обновлён"
+          schema:
+            $ref: "#/definitions/Course"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -354,9 +400,16 @@ paths:
         description: "Курс id"
         required: true
         type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "204":
+        "200":
           description: "Курс успешно удален"
+          schema:
+            $ref: "#/definitions/Course"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -391,11 +444,16 @@ paths:
         description: "Запрос id"
         required: true
         type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
         "201":
           description: "Промокод успешно создан"
           schema:
-            $ref: "#/definitions/Id"
+            $ref: "#/definitions/Promo"
   /promo/check:
     post:
       tags:
@@ -413,11 +471,14 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/Data"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "201":
+        "200":
           description: "Промокод проверен"
-          schema:
-            $ref: "#/definitions/Id"
   /promo/{promoId}:
     get:
       tags:
@@ -432,6 +493,11 @@ paths:
       - name: "promoId"
         in: "path"
         description: "Акция id"
+        required: true
+        type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
         required: true
         type: "string"
       responses:
@@ -472,9 +538,16 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/Promo"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "204":
+        "200":
           description: "Акция успешно обновлён"
+          schema:
+            $ref: "#/definitions/Promo"
         "400":
           description: "Ошибка в запросе"
           schema:
@@ -502,9 +575,28 @@ paths:
         description: "Акция id"
         required: true
         type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
+        required: true
+        type: "string"
       responses:
-        "204":
+        "200":
           description: "Акция успешно удалена"
+          schema:
+            $ref: "#/definitions/Promo"
+        "400":
+          description: "Ошибка в запросе"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Пользователь не авторизован"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Непредвиденная ошибка"
+          schema:
+            $ref: "#/definitions/Error"
   /notification/search:
     get:
       tags:
@@ -524,6 +616,11 @@ paths:
       - name: "destination"
         in: "query"
         description: "Получатель"
+        required: true
+        type: "string"
+      - name: "Authorization"
+        in: "header"
+        description: "Токен доступа"
         required: true
         type: "string"
       responses:
@@ -556,20 +653,16 @@ definitions:
   Contract:
     type: "object"
     properties:
-      name:
+      id:
+        type: "string"    
+      courseId:
+        type: "string"
+      promoId:
         type: "string"
       template:
         type: "string"
-      cost:
-        type: "number"
-      limit:
-        type: "number"
-      from:
+      state:
         type: "string"
-        format: "date"
-      to:
-        type: "string"
-        format: "date"
   Data:
     type: "object"
     properties:
@@ -582,9 +675,9 @@ definitions:
   Course:
     type: "object"
     properties:
+      id:
+        type: "string"  
       name:
-        type: "string"
-      template:
         type: "string"
       cost:
         type: "number"
@@ -596,30 +689,33 @@ definitions:
       to:
         type: "string"
         format: "date"
+      state:
+        type: "string"
   Promo:
     type: "object"
     properties:
+      id:
+        type: "string"  
       name:
         type: "string"
       code:
         type: "string"
-      personal:
+      active:
         type: "boolean"
+      discount:
+        type: "number"
       from:
         type: "string"
-        format: "date-time"
+        format: "date"
       to:
         type: "string"
-        format: "date-time"
+        format: "date"
+      state:
+        type: "string"
   Token:
     type: "object"
     properties:
       token:
-        type: "string"
-  Id:
-    type: "object"
-    properties:
-      id:
         type: "string"
   Notification:
     type: "object"
@@ -636,7 +732,16 @@ definitions:
   Error:
     type: "object"
     properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "number"
+      error:
+        type: "string"
       message:
+        type: "string"
+      path:
         type: "string"
 externalDocs:
   description: "Find out more about Swagger"
